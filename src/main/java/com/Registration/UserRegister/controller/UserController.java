@@ -5,10 +5,9 @@ import com.Registration.UserRegister.model.UserRegistrationResponse;
 import com.Registration.UserRegister.service.IPGeolocationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -25,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody UserRegistrationRequest request) {
+    public ResponseEntity<UserRegistrationResponse> registerUser(@RequestBody UserRegistrationRequest request) {
         // Validate inputs
         if (isNullorEmpty(request.getUsername(), request.getPassword(), request.getIp())) {
             log.info("Request is invalid");
@@ -59,7 +58,7 @@ public class UserController {
                 !password.matches("^(?=.*[0-9])(?=.*[A-Z])(?=.*[_#$%.]).+$");
     }
 
-    private ResponseEntity<String> badRequestResponse(String message) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+    private ResponseEntity<UserRegistrationResponse> badRequestResponse(String message) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new UserRegistrationResponse(message));
     }
 }
